@@ -1,0 +1,16 @@
+project(memtime) {
+
+  // this tells mps where to put the executable
+  install = ../bin
+
+  // this tells mpc, that memtime is an executable
+  exename = memtime
+
+  Header_Files {
+    ../CustomRand/CustomRand.h
+  }
+
+  Source_Files {
+    memtime.cpp
+  }
+}

@@ -1,0 +1,16 @@
+project(test_ax_b_c_random) {
+
+  // this tells mps where to put the executable
+  install = ../bin
+
+  // this tells mpc, that test_ax_b_c_random is an executable
+  exename = test_ax_b_c_random
+
+  Header_Files {
+    ../CustomRand/CustomRand.h
+  }
+
+  Source_Files {
+    test_ax_b_c_random.cpp
+  }
+}

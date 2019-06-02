@@ -1,6 +1,5 @@
 /// \file memory_fence.h
 /// \brief wrapper for memory fences to help make them portable
-
 #ifndef memory_fence_h
 #define memory_fence_h
 

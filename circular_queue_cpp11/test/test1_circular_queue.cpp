@@ -4,6 +4,7 @@
 #include "circular_queue.h"
 
 #include <iostream>
+#include <vector>
 
 using namespace util_ipc;
 using namespace std;
@@ -15,7 +16,7 @@ using namespace std;
 
 void test1() {
   int32_t sz = sizeof( circular_queue<int,SIZE>);
-  std::vector<char> blob_alloc;
+  std::vector<char> blob_alloc(sz, 'z');
   char *blob = &*blob_alloc.begin();
   circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob, "foo");
 
@@ -46,10 +47,9 @@ void test1() {
 
 void test2() {
   int32_t sz = sizeof( circular_queue<int,SIZE>);
-  char *blob = new char[sz];
-  boost::shared_array< char> cleaner( blob);
+  std::vector<char> blob_alloc(sz, 'z');
+  char *blob = &*blob_alloc.begin();
   circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob, "foo");
-  boost::shared_array< circular_queue<unsigned int,SIZE> * > clean_cq;
 
   unsigned int i, j, k;
   for (i=0; i<OFFSET; ++i) {

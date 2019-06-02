@@ -3,16 +3,10 @@
 
 //https://stackoverflow.com/questions/152016/detecting-cpu-architecture-compile-time
 
-#ifdef MSVC
-#ifdef _M_X86
+#if defined(_MSC_VER)
 #define ARCH_X86
-#endif
-#endif
-
-#ifdef GCC
-#ifdef __i386__
+#elif defined(__GNUC__) || defined( __ICL) 
 #define ARCH_X86
-#endif
 #endif
 
 #endif

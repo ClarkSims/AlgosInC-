@@ -2,23 +2,22 @@
 /// \brief This program does a simple test to where data is put into a queue, and popped out. It is tested
 ///  to make sure the data coming out, is what it is supposed to be.
 #include "circular_queue.h"
-#include <boost/shared_array.hpp>
 
 #include <iostream>
 
 using namespace util_ipc;
 using namespace std;
 
-#define SIZE   20
+// SIZE is 2 pages
+#define SIZE   8192
 #define N      100
 #define OFFSET 5
 
 void test1() {
   int32_t sz = sizeof( circular_queue<int,SIZE>);
-  char *blob = new char[sz];
-  boost::shared_array< char> cleaner( blob);
+  std::vector<char> blob_alloc;
+  char *blob = &*blob_alloc.begin();
   circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob, "foo");
-//  boost::shared_array< circular_queue<unsigned int,SIZE> * > clean_cq;
 
   unsigned int i, j, k;
   for (i=0; i<OFFSET; ++i) {

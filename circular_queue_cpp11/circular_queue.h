@@ -32,11 +32,10 @@ namespace util_ipc {
   template <class T, unsigned long  _size, class Int = uint32_t, unsigned cache_line_size = 64>
     class circular_queue {
 public:
-    char _name[UTIL_CIRCULAR_QUEUE_SIZE];
     volatile Int  _head_offset;
     char _head_pad[ cache_line_size - sizeof(Int)];
     volatile Int  _tail_offset;
-    har _head_pad[ cache_line_size - sizeof(Int)]
+    char _tail_pad[ cache_line_size - sizeof(Int)];
     T volatile _data[_size];
 
   circular_queue( bool call_inplace_new = false) :
@@ -60,13 +59,10 @@ public:
     ~circular_queue() {
       int32_t i;
       for (i=0; i<_size; ++i) {
-    _data[i].~T();
+        _data[i].~T();
       }
-      memset( _name, 0, sizeof(_name));
       _head_offset = _tail_offset = 0;
     }
-
-    const char *get_name() const { return _name;}
 
     Int size() const { return _tail_offset - _head_offset;}
 
@@ -175,7 +171,7 @@ public:
     /// <b> On Error: </b> no error checking is done <br/>
     /// <b> Description: </b> This function advances the head of the queue by n. This function is used
     ///  to catch up if the writer, has looped around and written data before the reader can read it.
-    void pop_n_front( unsgined n) {
+    void pop_n_front( unsigned n) {
       _head_offset += n;
     }
 

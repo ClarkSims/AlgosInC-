@@ -4,7 +4,9 @@
 #ifndef memory_fence_h
 #define memory_fence_h
 
-#if ARCH_X86
+#include "architecture.h"
+
+#ifdef ARCH_X86
 namespace memory_fence {
 
   inline void sfence() {

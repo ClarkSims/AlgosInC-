@@ -52,8 +52,8 @@ public:
 
   public:
 
-    static circular_queue* factory( void *memory_blob, const char *Name) {
-      return new( (void*)memory_blob) circular_queue( Name);
+    static circular_queue* factory( void *memory_blob) {
+      return new( (void*)memory_blob) circular_queue();
     }
 
     ~circular_queue() {
@@ -189,9 +189,6 @@ public:
     uint64_t get_number_popped() {
       return _head_offset;
     }
-
-    template<class U,int _Size, class _Int>
-    friend circular_queue<U,_Size, _Int>* factory_in_shared_memory( const char *Name);
   };
 }
 

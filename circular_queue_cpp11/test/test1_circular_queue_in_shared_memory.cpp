@@ -29,10 +29,9 @@ int main( int argc, char *argv[])
     key_t key;
     int shmid;
     void *data;
-    int mode;
     typedef circular_queue<unsigned,SIZE> cqueue;
     size_t i, cqueue_size = sizeof(cqueue);
-    cqueue *cq;
+    cqueue *cq = nullptr;
 
     if (argc != 2) {
         cerr << "usage test1_circular_queue_in_shared_memory  [parent|child|cleanup]" << endl;
@@ -58,17 +57,19 @@ int main( int argc, char *argv[])
             exit(1);
         }
     }
+    cout << "shmid = " << shmid << endl;
 
     /* attach to the segment to get a pointer to it: */
-    data = shmat(shmid, (void *)0, 0);
-    if (data == (char *)(-1)) {
-        perror("shmat");
-        exit(1);
-    } else {
-        printf( "data pointer = %p\n", data);
+    if (argv1 == "parent" || argv1 == "child") {
+        data = shmat(shmid, (void *)0, 0);
+        if (data == (char *)(-1)) {
+            perror("shmat");
+            exit(1);
+        } else {
+            //printf( "data pointer = %p\n", data);
+        }
+        cq = cqueue::factory(data);
     }
-
-    cq = cqueue::factory(data);
 
     if (argv1 == "parent") {  //Parent process
         
@@ -110,7 +111,7 @@ int main( int argc, char *argv[])
 
         return 0;
     } else if (argv1=="cleanup") {
-        //boost::interprocess::shared_memory_object::remove( "MySharedMemory");
+        shmctl(shmid, IPC_RMID, NULL);
     } else {
         cerr << "argv[1] = {" << argv1 << "} is not recognized, it should be parent or child" << endl;
         return 2;

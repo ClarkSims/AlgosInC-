@@ -1,0 +1,17 @@
+project(test1_circular_queue)  {
+
+  install=../bin
+
+  // this tells mpc, that Hello is an executable
+  exename= test1_circular_queue
+
+  includes += .
+
+  specific(make) {
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=c++11
+  }
+
+  Source_Files {
+    test1_circular_queue.cpp
+  }
+}

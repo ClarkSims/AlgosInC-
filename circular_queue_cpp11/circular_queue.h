@@ -97,7 +97,7 @@ public:
     /// in the queue, are only intended to be read from the front, and written from the back.
     ///  It will also return nullptr if the beginnig is clobbered.
     T *begin() {
-      if (_tail_offset >= _head_offset) return nullptr; // begin is clobbered or queue is empty
+      if (_tail_offset <= _head_offset) return nullptr; // begin is clobbered or queue is empty
       return (T *)&_data[_head_offset % _size];
     }
 

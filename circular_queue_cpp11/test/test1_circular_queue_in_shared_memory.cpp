@@ -66,11 +66,7 @@ int main( int argc, char *argv[])
             printf( "data pointer = %p\n", data);
         }
 
-        if (argv1 == "parent") {
-            cq = util_ipc::circular_queue_in_shared_memory<int64_t,SIZE>::open_or_create( "MySharedMemory");
-        } else {
-            cq = util_ipc::circular_queue_in_shared_memory<int64_t,SIZE>::open_only( "MySharedMemory");
-        }
+        circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory(data);
 
         int i;
         for (i=0; i<N;) {

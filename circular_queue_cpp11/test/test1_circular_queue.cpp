@@ -18,7 +18,7 @@ void test1() {
   int32_t sz = sizeof( circular_queue<int,SIZE>);
   std::vector<char> blob_alloc(sz, 'z');
   char *blob = &*blob_alloc.begin();
-  circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob, "foo");
+  circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob);
 
   unsigned int i, j, k;
   for (i=0; i<OFFSET; ++i) {
@@ -49,7 +49,7 @@ void test2() {
   int32_t sz = sizeof( circular_queue<int,SIZE>);
   std::vector<char> blob_alloc(sz, 'z');
   char *blob = &*blob_alloc.begin();
-  circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob, "foo");
+  circular_queue<unsigned int,SIZE> *cq = circular_queue<unsigned int,SIZE>::factory( blob);
 
   unsigned int i, j, k;
   for (i=0; i<OFFSET; ++i) {

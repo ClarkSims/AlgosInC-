@@ -1,3 +1,7 @@
+#include <chrono>
+#include <thread>
+#include "shared_memory_price_server.h"
+
 #define CPU_NUM 3
 
 void set_cpu_affinity(int num) {
@@ -6,7 +10,27 @@ void set_cpu_affinity(int num) {
 void set_schedular_policy() {
 }
 
+volatile int * global_stop_now = nullptr;
+
+void termination_handler (int signum) {
+    *global_stop_now = signum;
+}
+
 void set_signal_handlers(volatile int * flag) {
+    struct sigaction new_action, old_action;
+    new_action.sa_handler = termination_handler;
+    sigemptyset (&new_action.sa_mask);
+    new_action.sa_flags = 0;
+    sigaction (SIGINT, NULL, &old_action);
+    if (old_action.sa_handler != SIG_IGN)
+        sigaction (SIGINT, &new_action, NULL);
+    sigaction (SIGHUP, NULL, &old_action);
+    if (old_action.sa_handler != SIG_IGN)
+        sigaction (SIGHUP, &new_action, NULL);
+    sigaction (SIGTERM, NULL, &old_action);
+    if (old_action.sa_handler != SIG_IGN)
+        sigaction (SIGTERM, &new_action, NULL);
+
 }
 
 struct security_encoding {
@@ -52,7 +76,7 @@ int main() {
         //update new price queue
         //update prices snapshot
 #if SAVE_CPU
-        sleep(1);
+        this_thread::sleep_for(std::chrono::milliseconds(x));
 #else
         if(stop_now)
             break;

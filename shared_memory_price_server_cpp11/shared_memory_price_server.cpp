@@ -3,11 +3,6 @@
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
-// populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
-// ie security encodings
-void init_handshake_info() {
-}
-
 int main() {
     volatile int stop_now = 0;
     set_cpu_affinity(SHARED_MEMORY_PRICE_SERVER_CPU_AFFINITY);

@@ -35,7 +35,9 @@ struct security_encoding {
         const char *Ticker,
         const char *Exchange,
         uint32_t Id=0,
-        uint32_t Denom=100) 
+        uint32_t Denom=100):
+        id(Id),
+        denominator(Denom)
     {
         assert( strlen(Ticker) < sizeof(ticker));
         assert( strlen(Exchange) < sizeof(exchange));
@@ -46,7 +48,8 @@ extern unsigned num_stock_symbols;
 extern size_t security_encoding_shmem_size;
 extern const char *exchanges[NUM_STOCK_EXCHANGE];
 extern const char *tickers[];
-
+#define SECURITY_ENCODING_FILE_NAME "security_encoding_watermark.txt"
+#define SECURITY_ENCODING_SHMEM_ID 1111
 
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings

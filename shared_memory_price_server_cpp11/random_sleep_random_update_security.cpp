@@ -29,19 +29,20 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
         size_t bo_spread = random() %5 + 5;
         int new_bid = pd->bid + tick_size;
         if (new_bid > 0 ) {
-            if (new_bid > nbbo_pd->ask)
             int new_ask = pd->bid + bo_spread;
-            int new_ask_size = random() % 7 + 1
+            int new_bid_size = random() % 7 + 1;
+            int new_ask_size = random() % 7 + 1;
 
             if (new_bid > nbbo_pd->ask || new_ask < nbbo_pd->bid) {
                 // invalidate everyting
                 // set to midpoint
             } else {
                 pd->bid = new_bid;
-                pd->ask 
+                pd->ask = new_ask;
+                pd->bid_size = new_bid_size;
+                pd->ask_size = new_ask_size;
             }
-
-
+        }
     }
     return 1;
 }

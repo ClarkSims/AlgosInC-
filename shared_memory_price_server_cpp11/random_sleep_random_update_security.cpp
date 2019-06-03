@@ -15,8 +15,6 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
         // ugly! fix this, did this because I was getting compile errors
         // used excessive force to insure against reordering
         price_datum* nbbo_pd = (price_datum*) ((security_datum*) nbbo_update)->get_older();
-        nbbo_pd->mark_dirty();
-        atomic_signal_fence(std::memory_order_acq_rel);
 
         volatile security_datum* update = &sec_datum[sec_off*NUM_STOCK_EXCHANGE + ex_off];
         // ugly! fix this, did this because I was getting compile errors
@@ -37,10 +35,35 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
                 // invalidate everyting
                 // set to midpoint
             } else {
+                bool nbbo_dirty = false;
+                if (pd->bid > nbbo_pd->bid || pd->ask < nbbo_pd->ask){
+                    nbbo_pd->mark_dirty();
+                    atomic_signal_fence(std::memory_order_acq_rel);
+                    nbbo_dirty = true;
+                }
                 pd->bid = new_bid;
                 pd->ask = new_ask;
                 pd->bid_size = new_bid_size;
                 pd->ask_size = new_ask_size;
+
+                // again ugly, fix later
+                atomic_signal_fence(std::memory_order_acq_rel);
+                pd->mark_clean();
+                atomic_signal_fence(std::memory_order_acq_rel);
+                if (pd->bid > nbbo_pd->bid) {
+                    nbbo_pd->bid = new_bid;
+                    nbbo_pd->bid_size = new_bid_size;
+                }
+                if (pd->ask < nbbo_pd->ask) {
+                    nbbo_pd->ask = new_ask;
+                    nbbo_pd->ask_size = new_ask_size;
+                }
+
+                // again ugly, fix later
+                atomic_signal_fence(std::memory_order_acq_rel);
+                if (nbbo_dirty) {
+                    nbbo_pd->mark_clean();
+                }
             }
         }
     }

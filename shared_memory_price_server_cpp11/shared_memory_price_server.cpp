@@ -1,9 +1,10 @@
 #include <chrono>
 #include <thread>
+#include <iostream>
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
-#define SAVE_CPU_SLEEP_TIME 0
+#define SAVE_CPU_SLEEP_TIME 100
 
 void init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
 }
@@ -21,10 +22,12 @@ int main() {
     while (true) {
         //increment heartbeats
         //update new price queue
-        //update prices snapshot
+        //update nbbo
 
+        // this conditional must be before pause
         if (stop_now)
             break;
+
 #if SAVE_CPU_SLEEP_TIME > 0
         std::this_thread::sleep_for(std::chrono::milliseconds(SAVE_CPU_SLEEP_TIME));
 #elif defined(ARCH_X86)
@@ -41,6 +44,7 @@ int main() {
 #error Unsuppoted OS, write pause if possible
 #endif // ARCH_X86
     }
+    std::cerr << "shutting down" << std::endl;
 }
         
 

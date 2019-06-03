@@ -8,6 +8,7 @@ void termination_handler (int signum) {
 }
 
 void set_signal_handlers(volatile int * flag) {
+    global_stop_now = flag;
     struct sigaction new_action, old_action;
     new_action.sa_handler = termination_handler;
     sigemptyset (&new_action.sa_mask);

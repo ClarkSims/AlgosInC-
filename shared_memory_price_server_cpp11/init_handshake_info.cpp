@@ -14,7 +14,7 @@ void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes) {
 
 }
 
-char *exchanges[] = {
+const char *exchanges[] = {
     "ARCA",
     "BATS",
     "NASDAQ",
@@ -22,7 +22,7 @@ char *exchanges[] = {
     ""
 };
 
-char *tickers[] = {
+const char *tickers[] = {
     "SPY",
     "QQQ",
     "MSFT",

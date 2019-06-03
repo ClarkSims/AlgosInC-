@@ -3,13 +3,17 @@
 #include <iostream>
 #include "architecture.h"
 #include "shared_memory_price_server.h"
+#include "memory_fence.h"
 
 #define SAVE_CPU_SLEEP_TIME 100
 
 void init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
+
 }
 
-volatile uint64_t *init_heartbeats() { return nullptr;}
+size_t random_sleep_random_update_security(security_encoding* sec_codes, size_t num_sec_codes) {
+    return 1;
+}
 
 int main() {
     volatile int stop_now = 0;
@@ -24,7 +28,14 @@ int main() {
     heartbeats = init_heartbeats();
     //init simple snapshot
     while (true) {
-        //increment heartbeats
+        ++*heartbeats;
+#if defined(ARCH_X86)
+        memory_fence::sfence();
+#else
+        atomic_thread_fence(std::memory_order_release);
+#endif
+        random_sleep_random_update_security(sec_codes, num_sec_codes);
+
         //update new price queue
         //update nbbo
 

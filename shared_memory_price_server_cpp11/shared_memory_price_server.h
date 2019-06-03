@@ -73,5 +73,6 @@ void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes);
 
 void *get_shared_memory_object( const char *fname, int id, size_t size, bool huge_page=false);
 
+#define SECURITY_ENCODING_HEARTBEATS_ID 2222
 volatile uint64_t *init_heartbeats();
 #endif

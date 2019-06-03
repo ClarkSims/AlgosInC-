@@ -1,13 +1,14 @@
-#ifdef linux
+#ifdef __linux__
 #include <sched.h>
 #include <errno.h>
 #include <stdio.h>
 #include <pthread.h>
 #endif
+#include <iostream>
 #include "shared_memory_price_server.h"
 
 void set_cpu_affinity( int cpu_offset) { 
-#ifdef linux 
+#ifdef __linux__
     int s; 
     cpu_set_t cpuset; 
     pthread_t thread; 
@@ -20,7 +21,7 @@ void set_cpu_affinity( int cpu_offset) {
 
     if (s != 0) {
         perror( "pthread_setaffinity_np failed ");
-        cerr << "s = " << s << endl;
+        std::cerr << "s = " << s << std::endl;
         exit(1);
     }
 #endif

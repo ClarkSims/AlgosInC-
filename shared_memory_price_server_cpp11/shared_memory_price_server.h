@@ -130,7 +130,9 @@ std::vector<price_datum*>& random_sleep_random_update_security(
 
 volatile security_datum* init_snapshot(
     security_encoding* sec_codes,
-    size_t num_sec_codes);
+    size_t num_sec_codes,
+    bool first_time = 0);
 
+#define SECURITY_SNAPSHOT_SHMEM_ID 3333
 
 #endif

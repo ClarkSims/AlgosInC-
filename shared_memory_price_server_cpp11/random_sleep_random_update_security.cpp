@@ -37,6 +37,27 @@ void mark_all_clean( std::vector<price_datum*>& dirty_list) {
     dirty_list[0]->mark_clean();
 }
 
+volatile security_datum* init_snapshot(
+    security_encoding* sec_codes,
+    size_t num_sec_codes,
+    bool first_time) 
+{
+    void *data = get_shared_memory_object(SECURITY_ENCODING_FILE_NAME, SECURITY_SNAPSHOT_SHMEM_ID, 64);
+    volatile security_datum* sec_data;
+    sec_data = reinterpret_cast<volatile security_datum *>(data);
+
+    if (first_time) {
+        size_t num_tickers = num_sec_codes / NUM_STOCK_EXCHANGE;
+        for (size_t i=0; i<num_tickers; ++i) {
+            mark_all_dirty( i, (security_datum *)sec_data);
+            define_market( dirty_list, 1000000);
+            mark_all_clean( dirty_list);            
+        }
+    }
+
+    return sec_data;
+}
+
 std::vector<price_datum*>& random_sleep_random_update_security(
     security_datum* sec_data,
     size_t num_sec_datum)
@@ -52,15 +73,12 @@ std::vector<price_datum*>& random_sleep_random_update_security(
     if (do_trade) {
         size_t sec_off = random() % num_sec_datum;
         size_t ex_off = random() % (NUM_STOCK_EXCHANGE - 1) + 1; // skip nbbo
-         security_datum* nbbo_update = &sec_data[sec_off*NUM_STOCK_EXCHANGE];
+        security_datum* nbbo_update = &sec_data[sec_off*NUM_STOCK_EXCHANGE];
 
-        // ugly! fix this, did this because I was getting compile errors
-        // used excessive force to insure against reordering
         price_datum* nbbo_pd = (price_datum*) ((security_datum*) nbbo_update)->get_older();
 
-         security_datum* update = &sec_data[sec_off*NUM_STOCK_EXCHANGE + ex_off];
-        // ugly! fix this, did this because I was getting compile errors
-        // used excessive force to insure against reordering
+        security_datum* update = &sec_data[sec_off*NUM_STOCK_EXCHANGE + ex_off];
+
         price_datum* pd = (price_datum*) ((security_datum*) nbbo_update)->get_older();
 
         size_t tick_size = random() % 7 - 3;

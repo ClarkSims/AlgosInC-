@@ -16,7 +16,7 @@ int main() {
     set_schedular_policy_fifo();
     set_signal_handlers(&stop_now);
     init_handshake_info(sec_codes, num_sec_codes);
-    volatile security_datum* sec_data = init_snapshot(sec_codes, num_sec_codes);
+    volatile security_datum* sec_data = init_snapshot(sec_codes, num_sec_codes, true);
     heartbeats = init_heartbeats();
 
     while (true) {

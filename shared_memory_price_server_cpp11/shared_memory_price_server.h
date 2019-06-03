@@ -7,7 +7,7 @@
 
 void set_cpu_affinity(int num);
 
-void set_schedular_policy();
+int set_schedular_policy_fifo();
 
 void termination_handler (int signum);
 

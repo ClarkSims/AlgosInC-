@@ -27,7 +27,9 @@ void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes) {
 
     for (i=k=0; tickers[i][0]!=0; ++i) {
         for (j=0; exchanges[j]!=0; ++j, ++k) {
-            sec_codes[k].init(tickers[i], exchanges[j], k, 100); // all trading is in pennies for starters
+            char* ptr = reinterpret_cast<char*>(&sec_codes[k]);
+            security_encoding *dummy = new security_encoding(tickers[i], exchanges[j], k, 100);
+            // all trading is in pennies for starters
         }
     }
 }

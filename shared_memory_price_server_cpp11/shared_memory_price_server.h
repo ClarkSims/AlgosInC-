@@ -127,4 +127,10 @@ volatile uint64_t *init_heartbeats();
 
 std::vector<price_datum*>& random_sleep_random_update_security(
     security_datum* sec_codes, size_t num_sec_codes);
+
+volatile security_datum* init_snapshot(
+    security_encoding* sec_codes,
+    size_t num_sec_codes);
+
+
 #endif

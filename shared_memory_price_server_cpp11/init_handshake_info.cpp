@@ -33,6 +33,12 @@ void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes) {
     }
 }
 
+volatile security_datum* init_snapshot(
+    security_encoding* sec_codes,
+    size_t num_sec_codes) 
+{
+    return (volatile security_datum*) nullptr;
+}
 const char *exchanges[NUM_STOCK_EXCHANGE] = {
     "NBBO",
     "ARCA",

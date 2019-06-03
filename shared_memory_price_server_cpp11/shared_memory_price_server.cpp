@@ -7,10 +7,6 @@
 
 #define SAVE_CPU_SLEEP_TIME 100
 
-volatile security_datum* init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
-    return (volatile security_datum*) nullptr;
-}
-
 int main() {
     int stop_now = 0;
     volatile uint64_t *heartbeats;
@@ -22,7 +18,6 @@ int main() {
     init_handshake_info(sec_codes, num_sec_codes);
     volatile security_datum* sec_data = init_snapshot(sec_codes, num_sec_codes);
     heartbeats = init_heartbeats();
-    //init simple snapshot
 
     while (true) {
         ++*heartbeats;

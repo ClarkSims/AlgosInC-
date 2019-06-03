@@ -1,6 +1,8 @@
 #ifndef SHARED_MEMORY_PRICE_SERVER_H
 #define SHARED_MEMORY_PRICE_SERVER_H
 
+#define SHARED_MEMORY_PRICE_SERVER_CPU_AFFINITY 3
+
 #include <stdint.h>
 
 void set_cpu_affinity(int num);

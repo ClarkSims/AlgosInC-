@@ -3,11 +3,6 @@
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
-#define CPU_NUM 3
-
-void set_cpu_affinity(int num) {
-}
-
 void set_schedular_policy() {
 }
 
@@ -18,7 +13,7 @@ void init_handshake_info() {
 
 int main() {
     volatile int stop_now = 0;
-    set_cpu_affinity(CPU_NUM);
+    set_cpu_affinity(SHARED_MEMORY_PRICE_SERVER_CPU_AFFINITY);
     set_schedular_policy();
     set_signal_handlers(&stop_now);
     init_handshake_info();

@@ -17,6 +17,8 @@ void termination_handler (int signum) {
     *global_stop_now = signum;
 }
 
+#include <signal.h>
+
 void set_signal_handlers(volatile int * flag) {
     struct sigaction new_action, old_action;
     new_action.sa_handler = termination_handler;
@@ -34,13 +36,6 @@ void set_signal_handlers(volatile int * flag) {
 
 }
 
-struct security_encoding {
-    char ticker[32];
-    char exchange[8];
-    uint32_t id;
-    uint32_t denominator;
-};
-
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings
 void init_handshake_info() {
@@ -50,7 +45,7 @@ int main() {
     volatile int stop_now = 0;
     set_cpu_affinity(CPU_NUM);
     set_schedular_policy();
-    set_signal_handler(&stop_now);
+    set_signal_handlers(&stop_now);
     init_handshake_info();
 
     //init simple init handshake info
@@ -61,12 +56,9 @@ int main() {
         //update prices snapshot
 #if SAVE_CPU
         this_thread::sleep_for(std::chrono::milliseconds(x));
-#else
-        if(stop_now)
+#endif
+        if (stop_now)
             break;
-        // play nice with cpu by turning of branching if possible
-        // https://stackoverflow.com/questions/50428450/what-does-asm-volatile-pause-memory-do
-        // https://stackoverflow.com/questions/4725676/how-does-x86-pause-instruction-work-in-spinlock-and-can-it-be-used-in-other-sc
 #ifdef ARCH_X86
 #if defined(_MSC_VER)
         atomic_signal_fence(memory_order_acq_rel);
@@ -76,11 +68,10 @@ int main() {
         __asm__ __volatile__ ("pause" ::: "memory");
 #else
 #error Unsupported Compiler, write pause if possible
-#endif
+#endif // defined(_MSC_VER)
 #else
 #error Unsuppoted OS, write pause if possible
-#endif
-
+#endif // ARCH_X86
     }
 }
         

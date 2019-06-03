@@ -16,7 +16,7 @@ std::vector< price_datum*>& mark_all_dirty( size_t sec_off,  security_datum* sec
 
 void define_market( std::vector<price_datum*>& dirty_list, unsigned mid)
 {
-
+    uint32_t nbbo_bid=0, nbbo_ask=UINT32_MAX;
 }
 
 void mark_all_clean( std::vector<price_datum*>& dirty_list) {

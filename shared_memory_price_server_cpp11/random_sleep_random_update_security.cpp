@@ -17,6 +17,18 @@ std::vector< price_datum*>& mark_all_dirty( size_t sec_off,  security_datum* sec
 void define_market( std::vector<price_datum*>& dirty_list, unsigned mid)
 {
     uint32_t nbbo_bid=0, nbbo_ask=UINT32_MAX;
+    dirty_list.at(0)->bid = mid - 1 - 10;
+    dirty_list.at(0)->ask = mid + 1 - 10;
+    dirty_list.at(0)->bid_size = 10;
+    dirty_list.at(0)->ask_size = 10;
+
+    for (unsigned ex_off = 1; ex_off < NUM_STOCK_EXCHANGE; ++ex_off) {
+        dirty_list.at(ex_off)->bid = mid - ex_off - 10;
+        dirty_list.at(ex_off)->ask = mid + ex_off - 10;
+        dirty_list.at(ex_off)->bid_size = 10;
+        dirty_list.at(ex_off)->ask_size = 10;
+    }
+
 }
 
 void mark_all_clean( std::vector<price_datum*>& dirty_list) {

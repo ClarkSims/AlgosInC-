@@ -3,7 +3,7 @@
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
-#define SAVE_CPU_SLEEP_TIME 100
+#define SAVE_CPU_SLEEP_TIME 0
 
 void init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
 }
@@ -27,7 +27,7 @@ int main() {
             break;
 #if SAVE_CPU_SLEEP_TIME > 0
         std::this_thread::sleep_for(std::chrono::milliseconds(SAVE_CPU_SLEEP_TIME));
-#elif ARCH_X86
+#elif defined(ARCH_X86)
 #if defined(_MSC_VER)
         atomic_signal_fence(memory_order_acq_rel);
         __asm { pause }

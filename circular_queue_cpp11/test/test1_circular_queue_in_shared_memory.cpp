@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <chrono>
+#include <algorithm>
 
 using namespace util_ipc;
 using namespace std;
@@ -17,11 +18,8 @@ using namespace std;
 #define SHM_SIZE SIZE*sizeof()
 #define N      10485760
 
-void tolower( string &s) {
-  size_t i;
-  for(i=0; i<s.size(); ++i) {
-    s[i] = (char)tolower(s[i]);
-  }
+void tolower( string &data) {
+    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
 }
 
 int main( int argc, char *argv[]) 

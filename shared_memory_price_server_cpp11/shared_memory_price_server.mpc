@@ -5,7 +5,7 @@ project(shared_memory_price_server)  {
   // this tells mpc, that Hello is an executable
   exename= shared_memory_price_server
 
-  includes += .
+  includes += . ../circular_queue_cpp11
 
   specific(make) {
     genflags += -Wall -std=c++11 -ggdb -O0 -std=c++11

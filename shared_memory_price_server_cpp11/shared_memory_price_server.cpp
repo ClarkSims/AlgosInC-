@@ -1,5 +1,6 @@
 #include <chrono>
 #include <thread>
+#include "architecture.h"
 #include "shared_memory_price_server.h"
 
 #define CPU_NUM 3

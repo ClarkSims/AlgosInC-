@@ -31,6 +31,20 @@ struct security_encoding {
         memset( this, 0, sizeof(*this));
     }
 
+    void init(
+       const char *Ticker,
+        const char *Exchange,
+        uint32_t Id,
+        uint32_t Denom)
+    {
+        assert( strlen(Ticker) < sizeof(ticker));
+        assert( strlen(Exchange) < sizeof(exchange));
+        strcpy( ticker, Ticker);
+        strcpy( exchange, Exchange);
+        id = Id;
+        denominator = Denom;
+    }
+
     security_encoding(
         const char *Ticker,
         const char *Exchange,
@@ -41,6 +55,8 @@ struct security_encoding {
     {
         assert( strlen(Ticker) < sizeof(ticker));
         assert( strlen(Exchange) < sizeof(exchange));
+        strcpy( ticker, Ticker);
+        strcpy( exchange, Exchange);
     }
 };
 

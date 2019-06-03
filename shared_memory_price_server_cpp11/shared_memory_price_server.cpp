@@ -11,10 +11,6 @@ void init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
 
 }
 
-size_t random_sleep_random_update_security(security_encoding* sec_codes, size_t num_sec_codes) {
-    return 1;
-}
-
 int main() {
     volatile int stop_now = 0;
     volatile uint64_t *heartbeats;

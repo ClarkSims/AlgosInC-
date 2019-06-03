@@ -75,4 +75,6 @@ void *get_shared_memory_object( const char *fname, int id, size_t size, bool hug
 
 #define SECURITY_ENCODING_HEARTBEATS_ID 2222
 volatile uint64_t *init_heartbeats();
+
+size_t random_sleep_random_update_security(security_encoding* sec_codes, size_t num_sec_codes);
 #endif

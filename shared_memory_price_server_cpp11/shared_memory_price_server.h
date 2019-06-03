@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <string.h>
 #include "architecture.h"
+#include "memory_fence.h"
 
 void set_cpu_affinity(int num);
 
@@ -28,13 +29,41 @@ struct price_datum {
     uint32_t bid_size;
     uint32_t ask;
     uint32_t ask_size;
+
+    void mark_dirty() {
+        front_guard += 2;
+#if defined(ARCH_X86)
+        memory_fence::sfence();
+#else
+        atomic_thread_fence(std::memory_order_release);
+#endif
+    }
+
+    void mark_clean() {
+        back_guard = front_guard;
+#if defined(ARCH_X86)
+        memory_fence::sfence();
+#else
+        atomic_thread_fence(std::memory_order_release);
+#endif
+    }
 };
 
 static_assert(sizeof(price_datum)*2 == CACHE_LINE_SIZE, "size of price_datum must equal CACHE_LINE_SIZE" );
 
 struct security_datum {
-    price_datum first;
-    price_datum second;
+    volatile price_datum first;
+    volatile price_datum second;
+
+    volatile price_datum* get_older() {
+        if (first.front_guard < second.front_guard) {
+            return & first;
+        } else {
+            return & second;
+        }
+    }
+
+
 };
 
 static_assert(sizeof(security_datum) == CACHE_LINE_SIZE, "size of security_datum must equal CACHE_LINE_SIZE" );
@@ -95,5 +124,5 @@ void *get_shared_memory_object( const char *fname, int id, size_t size, bool hug
 #define SECURITY_ENCODING_HEARTBEATS_ID 2222
 volatile uint64_t *init_heartbeats();
 
-size_t random_sleep_random_update_security(security_encoding* sec_codes, size_t num_sec_codes);
+size_t random_sleep_random_update_security(volatile security_datum* sec_codes, size_t num_sec_codes);
 #endif

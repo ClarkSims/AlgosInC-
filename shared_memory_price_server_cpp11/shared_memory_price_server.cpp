@@ -3,7 +3,6 @@
 #include <iostream>
 #include "architecture.h"
 #include "shared_memory_price_server.h"
-#include "memory_fence.h"
 
 #define SAVE_CPU_SLEEP_TIME 100
 

@@ -26,4 +26,6 @@ struct security_encoding {
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings
 void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes);
+
+void *get_shared_memory_object( const char *fname, int id, size_t size);
 #endif

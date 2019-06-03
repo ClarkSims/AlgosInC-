@@ -16,7 +16,6 @@ std::vector< price_datum*>& mark_all_dirty( size_t sec_off,  security_datum* sec
 
 void define_market( std::vector<price_datum*>& dirty_list, unsigned mid)
 {
-    uint32_t nbbo_bid=0, nbbo_ask=UINT32_MAX;
     dirty_list.at(0)->bid = mid - 1 - 10;
     dirty_list.at(0)->ask = mid + 1 - 10;
     dirty_list.at(0)->bid_size = 10;
@@ -77,9 +76,9 @@ std::vector<price_datum*>& random_sleep_random_update_security(
                     // mark all data
                     mark_all_dirty( sec_off, sec_data);
                     // define market from midpoint
-                    //define_market( sec_off, sec_data, (new_bid +new_ask)/2);
+                    define_market( dirty_list, (new_bid +new_ask)/2);
                     // cleanup
-                    //mark_all_clean( sec_off, sec_data);
+                    mark_all_clean( dirty_list);
                 }
 
             } else {
@@ -107,8 +106,6 @@ std::vector<price_datum*>& random_sleep_random_update_security(
                     nbbo_pd->ask_size = new_ask_size;
                 }
 
-                // again ugly, fix later
-                atomic_signal_fence(std::memory_order_acq_rel);
                 if (nbbo_dirty) {
                     nbbo_pd->mark_clean();
                 }

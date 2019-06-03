@@ -2,7 +2,20 @@
 #include <thread>
 #include "shared_memory_price_server.h"
 
-size_t random_sleep_random_update_security(volatile security_datum* sec_datum, size_t num_sec_datum) {
+void mark_all_dirty( size_t sec_off, volatile security_datum* sec_data) {
+}
+    //size_t 
+    //for
+ void define_market( size_t sec_off, volatile security_datum* sec_data, unsigned mid)
+ {
+
+ }
+
+void mark_all_clean( size_t sec_off, volatile security_datum* sec_data) {
+
+}
+
+size_t random_sleep_random_update_security(volatile security_datum* sec_data, size_t num_sec_datum) {
     size_t sleeptime = random() % 10;
     if (sleeptime>0)
         std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
@@ -10,13 +23,13 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
     if (do_trade) {
         size_t sec_off = random() % num_sec_datum;
         size_t ex_off = random() % (NUM_STOCK_EXCHANGE - 1) + 1; // skip nbbo
-        volatile security_datum* nbbo_update = &sec_datum[sec_off*NUM_STOCK_EXCHANGE];
+        volatile security_datum* nbbo_update = &sec_data[sec_off*NUM_STOCK_EXCHANGE];
 
         // ugly! fix this, did this because I was getting compile errors
         // used excessive force to insure against reordering
         price_datum* nbbo_pd = (price_datum*) ((security_datum*) nbbo_update)->get_older();
 
-        volatile security_datum* update = &sec_datum[sec_off*NUM_STOCK_EXCHANGE + ex_off];
+        volatile security_datum* update = &sec_data[sec_off*NUM_STOCK_EXCHANGE + ex_off];
         // ugly! fix this, did this because I was getting compile errors
         // used excessive force to insure against reordering
         price_datum* pd = (price_datum*) ((security_datum*) nbbo_update)->get_older();
@@ -31,9 +44,16 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
             int new_bid_size = random() % 7 + 1;
             int new_ask_size = random() % 7 + 1;
 
-            if (new_bid > nbbo_pd->ask || new_ask < nbbo_pd->bid) {
-                // invalidate everyting
-                // set to midpoint
+            if ((unsigned)new_bid > nbbo_pd->ask || (unsigned)new_ask < nbbo_pd->bid) {
+                if ((unsigned)new_bid < (unsigned)new_ask) {
+                    // mark all data
+                    mark_all_dirty( sec_off, sec_data);
+                    // define market from midpoint
+                    define_market( sec_off, sec_data, (new_bid +new_ask)/2);
+                    // cleanup
+                    mark_all_clean( sec_off, sec_data);
+                }
+
             } else {
                 bool nbbo_dirty = false;
                 if (pd->bid > nbbo_pd->bid || pd->ask < nbbo_pd->ask){

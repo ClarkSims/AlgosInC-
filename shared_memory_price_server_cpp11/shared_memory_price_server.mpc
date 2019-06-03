@@ -17,5 +17,6 @@ project(shared_memory_price_server)  {
     set_cpu_affinity.cpp
     shared_memory_price_server.cpp
     set_schedular_policy.cpp
+    init_handshake_info.cpp
   }
 }

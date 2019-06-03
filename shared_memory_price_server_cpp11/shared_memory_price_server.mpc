@@ -18,5 +18,6 @@ project(shared_memory_price_server)  {
     shared_memory_price_server.cpp
     set_schedular_policy.cpp
     init_handshake_info.cpp
+    get_shared_memory_object.cpp
   }
 }

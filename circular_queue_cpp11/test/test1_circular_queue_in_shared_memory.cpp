@@ -55,7 +55,7 @@ int main( int argc, char *argv[])
             exit(1);
         }
     }
-    cout << "shmid = " << shmid << endl;
+    //cout << "shmid = " << shmid << endl;
 
     /* attach to the segment to get a pointer to it: */
     if (argv1 == "parent" || argv1 == "child") {

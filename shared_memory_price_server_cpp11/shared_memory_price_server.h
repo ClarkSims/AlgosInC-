@@ -32,7 +32,7 @@ struct price_datum {
     uint32_t ask_size;
 
     inline void mark_dirty() {
-        front_guard += 2;
+        front_guard += 2; // need to fix for non x86
 #if defined(ARCH_X86)
         memory_fence::sfence();
 #else
@@ -46,7 +46,7 @@ struct price_datum {
 #else
         atomic_thread_fence(std::memory_order_release);
 #endif
-        back_guard = front_guard;
+        back_guard = front_guard; // need to fix this for non 86
     }
 };
 

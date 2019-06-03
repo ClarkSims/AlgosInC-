@@ -29,6 +29,7 @@ int main() {
         std::vector<price_datum*>& changed_list = 
             random_sleep_random_update_security((security_datum*)sec_data, num_sec_codes);
 
+        // write this later
         //update new price queue
 
         // this conditional must be before pause

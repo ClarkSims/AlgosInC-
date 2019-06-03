@@ -1,6 +1,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <vector>
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
@@ -11,7 +12,7 @@ volatile security_datum* init_snapshot(security_encoding* sec_codes, size_t num_
 }
 
 int main() {
-    volatile int stop_now = 0;
+    int stop_now = 0;
     volatile uint64_t *heartbeats;
     security_encoding* sec_codes;
     size_t num_sec_codes;
@@ -22,6 +23,7 @@ int main() {
     volatile security_datum* sec_data = init_snapshot(sec_codes, num_sec_codes);
     heartbeats = init_heartbeats();
     //init simple snapshot
+
     while (true) {
         ++*heartbeats;
 #if defined(ARCH_X86)
@@ -29,10 +31,10 @@ int main() {
 #else
         atomic_thread_fence(std::memory_order_release);
 #endif
-        random_sleep_random_update_security((security_datum*)sec_data, num_sec_codes);
+        std::vector<price_datum*>& changed_list = 
+            random_sleep_random_update_security((security_datum*)sec_data, num_sec_codes);
 
         //update new price queue
-        //update nbbo
 
         // this conditional must be before pause
         if (stop_now)

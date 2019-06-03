@@ -3,8 +3,9 @@
 #include <vector>
 #include "shared_memory_price_server.h"
 
+std::vector<price_datum*> dirty_list(NUM_STOCK_EXCHANGE);
+
 std::vector< price_datum*>& mark_all_dirty( size_t sec_off,  security_datum* sec_data) {
-    static std::vector<price_datum*> dirty_list(NUM_STOCK_EXCHANGE);
     security_datum* p_stock = sec_data + sec_off*NUM_STOCK_EXCHANGE;
     for (unsigned ex_off = 0; ex_off < NUM_STOCK_EXCHANGE; ++ex_off) {
         dirty_list.at(ex_off) = (price_datum*) p_stock[ex_off].get_older();
@@ -25,7 +26,14 @@ void mark_all_clean( std::vector<price_datum*>& dirty_list) {
     dirty_list[0]->mark_clean();
 }
 
-size_t random_sleep_random_update_security( security_datum* sec_data, size_t num_sec_datum) {
+std::vector<price_datum*>& random_sleep_random_update_security(
+    security_datum* sec_data,
+    size_t num_sec_datum)
+{
+    for (auto ex_off=0; ex_off < NUM_STOCK_EXCHANGE; ++ex_off) {
+        dirty_list[ex_off] = nullptr;
+    }
+
     size_t sleeptime = random() % 10;
     if (sleeptime>0)
         std::this_thread::sleep_for(std::chrono::milliseconds(sleeptime));
@@ -77,10 +85,7 @@ size_t random_sleep_random_update_security( security_datum* sec_data, size_t num
                 pd->bid_size = new_bid_size;
                 pd->ask_size = new_ask_size;
 
-                // again ugly, fix later
-                atomic_signal_fence(std::memory_order_acq_rel);
                 pd->mark_clean();
-                atomic_signal_fence(std::memory_order_acq_rel);
                 if (pd->bid > nbbo_pd->bid) {
                     nbbo_pd->bid = new_bid;
                     nbbo_pd->bid_size = new_bid_size;
@@ -98,5 +103,5 @@ size_t random_sleep_random_update_security( security_datum* sec_data, size_t num
             }
         }
     }
-    return 1;
+    return dirty_list;
 }

@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>
+#include <vector>
 #include "architecture.h"
 #include "memory_fence.h"
 
@@ -30,7 +31,7 @@ struct price_datum {
     uint32_t ask;
     uint32_t ask_size;
 
-    void mark_dirty() {
+    inline void mark_dirty() {
         front_guard += 2;
 #if defined(ARCH_X86)
         memory_fence::sfence();
@@ -39,13 +40,13 @@ struct price_datum {
 #endif
     }
 
-    void mark_clean() {
-        back_guard = front_guard;
+    inline void mark_clean() {
 #if defined(ARCH_X86)
         memory_fence::sfence();
 #else
         atomic_thread_fence(std::memory_order_release);
 #endif
+        back_guard = front_guard;
     }
 };
 
@@ -124,5 +125,6 @@ void *get_shared_memory_object( const char *fname, int id, size_t size, bool hug
 #define SECURITY_ENCODING_HEARTBEATS_ID 2222
 volatile uint64_t *init_heartbeats();
 
-size_t random_sleep_random_update_security(security_datum* sec_codes, size_t num_sec_codes);
+std::vector<price_datum*>& random_sleep_random_update_security(
+    security_datum* sec_codes, size_t num_sec_codes);
 #endif

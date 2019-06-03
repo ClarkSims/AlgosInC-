@@ -29,7 +29,7 @@ int main() {
 #else
         atomic_thread_fence(std::memory_order_release);
 #endif
-        random_sleep_random_update_security(sec_data, num_sec_codes);
+        random_sleep_random_update_security((security_datum*)sec_data, num_sec_codes);
 
         //update new price queue
         //update nbbo

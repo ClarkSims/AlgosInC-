@@ -9,4 +9,8 @@
 #define ARCH_X86
 #endif
 
+#if defined(ARCH_X86)
+#define CACHE_LINE_SIZE 64
+#endif
+
 #endif

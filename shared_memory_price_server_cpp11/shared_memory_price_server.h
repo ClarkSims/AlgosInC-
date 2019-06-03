@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>
+#include "architecture.h"
 
 void set_cpu_affinity(int num);
 
@@ -19,6 +20,24 @@ int set_schedular_policy_fifo();
 void termination_handler (int signum);
 
 void set_signal_handlers(volatile int * flag);
+
+struct price_datum {
+    uint64_t front_guard;
+    uint64_t back_guard;
+    uint32_t bid;
+    uint32_t bid_size;
+    uint32_t ask;
+    uint32_t ask_size;
+};
+
+static_assert(sizeof(price_datum)*2 == CACHE_LINE_SIZE, "size of price_datum must equal CACHE_LINE_SIZE" );
+
+struct security_datum {
+    price_datum first;
+    price_datum second;
+};
+
+static_assert(sizeof(security_datum) == CACHE_LINE_SIZE, "size of security_datum must equal CACHE_LINE_SIZE" );
 
 struct security_encoding {
     char ticker[8];

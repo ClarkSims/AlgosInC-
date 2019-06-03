@@ -1,0 +1,17 @@
+project(shared_memory_price_server)  {
+
+  install=../bin
+
+  // this tells mpc, that Hello is an executable
+  exename= shared_memory_price_server
+
+  includes += .
+
+  specific(make) {
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=c++11
+  }
+
+  Source_Files {
+    shared_memory_price_server.cpp
+  }
+}

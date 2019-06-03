@@ -45,23 +45,6 @@ struct security_encoding {
 void init_handshake_info() {
 }
 
-#ifdef ARCH_X86
-inline void pause() {
-#if defined(_MSC_VER)
-    atomic_signal_fence(memory_order_acq_rel);
-    __asm { pause }
-    atomic_signal_fence(memory_order_acq_rel);
-#elif defined(__GNUC__) || defined( __ICL)
-    __asm__ __volatile__ ("pause" ::: "memory");
-#else
-    #error Unsupported Compiler
-#endif
-#else
-inline void pause() {
-}
-#endif
-
-
 int main() {
     volatile int stop_now = 0;
     set_cpu_affinity(CPU_NUM);

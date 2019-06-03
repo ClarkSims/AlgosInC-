@@ -13,5 +13,6 @@ project(shared_memory_price_server)  {
 
   Source_Files {
     shared_memory_price_server.cpp
+    set_signal_handlers.cpp
   }
 }

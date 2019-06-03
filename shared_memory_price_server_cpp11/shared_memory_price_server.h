@@ -1,3 +1,7 @@
+#ifndef SHARED_MEMORY_PRICE_SERVER_H
+#define SHARED_MEMORY_PRICE_SERVER_H
+
+#include <stdint.h>
 
 void set_cpu_affinity(int num);
 
@@ -17,3 +21,4 @@ struct security_encoding {
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings
 void init_handshake_info();
+#endif

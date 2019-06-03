@@ -27,14 +27,19 @@ size_t random_sleep_random_update_security(volatile security_datum* sec_datum, s
 
         size_t tick_size = random() % 7 - 3;
         size_t bo_spread = random() %5 + 5;
-        pd->bid += tick_size;
-        pd->bid_size = random() % 7 + 1;
-        pd->ask = pd->bid + bo_spread;
+        int new_bid = pd->bid + tick_size;
+        if (new_bid > 0 ) {
+            if (new_bid > nbbo_pd->ask)
+            int new_ask = pd->bid + bo_spread;
+            int new_ask_size = random() % 7 + 1
 
-        //std::vector<int
-        if (pd->bid > nbbo_pd->ask) {
-
-        }
+            if (new_bid > nbbo_pd->ask || new_ask < nbbo_pd->bid) {
+                // invalidate everyting
+                // set to midpoint
+            } else {
+                pd->bid = new_bid;
+                pd->ask 
+            }
 
 
     }

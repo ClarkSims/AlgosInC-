@@ -9,8 +9,11 @@
 void init_snapshot(security_encoding* sec_codes, size_t num_sec_codes) {
 }
 
+volatile uint64_t *init_heartbeats() { return nullptr;}
+
 int main() {
     volatile int stop_now = 0;
+    volatile uint64_t *heartbeats;
     security_encoding* sec_codes;
     size_t num_sec_codes;
     set_cpu_affinity(SHARED_MEMORY_PRICE_SERVER_CPU_AFFINITY);
@@ -18,6 +21,7 @@ int main() {
     set_signal_handlers(&stop_now);
     init_handshake_info(sec_codes, num_sec_codes);
     init_snapshot(sec_codes, num_sec_codes);
+    heartbeats = init_heartbeats();
     //init simple snapshot
     while (true) {
         //increment heartbeats

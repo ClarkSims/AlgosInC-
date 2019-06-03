@@ -64,12 +64,14 @@ extern unsigned num_stock_symbols;
 extern size_t security_encoding_shmem_size;
 extern const char *exchanges[NUM_STOCK_EXCHANGE];
 extern const char *tickers[];
-#define SECURITY_ENCODING_FILE_NAME "security_encoding_watermark.txt"
 #define SECURITY_ENCODING_SHMEM_ID 1111
+#define SECURITY_ENCODING_FILE_NAME "security_encoding_watermark.txt"
 
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings
 void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes);
 
 void *get_shared_memory_object( const char *fname, int id, size_t size, bool huge_page=false);
+
+volatile uint64_t *init_heartbeats();
 #endif

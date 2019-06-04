@@ -1,0 +1,22 @@
+project(multi_thread_demo_basic_ioguard)  {
+
+  install=../../bin
+
+  // this tells mpc, that Hello is an executable
+  exename= multi_thread_demo_basic_ioguard
+
+  includes += .. ../../circular_queue_cpp11
+
+  specific(make) {
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=gnu++0x 
+    libs += boost_system boost_filesystem boost_thread
+  }
+
+  Specific (nmake,vc8,vc7) {
+     optimize = 
+  }
+
+  Source_Files {
+    multi_thread_demo_basic_ioguard.cpp
+  }
+}

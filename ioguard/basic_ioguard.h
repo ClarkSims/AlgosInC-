@@ -17,6 +17,10 @@ namespace util_ipc {
       int num_64bit_reads = sizeof(U)/sizeof(uint64_t)
     >
     class basic_ioguard {
+        static_assert(sizeof(U) % sizeof(uint64_t) == 0,
+          "fast copy requires size to be even multiple of 64 bits");
+        static_assert(std::is_trivially_copyable<U>::value,
+          "must be trivially copyable");
         inline volatile uint64_t* end() volatile { 
             return (uint64_t*)&data + num_64bit_reads;
         }

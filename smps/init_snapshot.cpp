@@ -13,7 +13,7 @@ struct price_datum {
 };
 */
 
-void calc_new_market(
+void calc_new_market_with_random_price_change(
     guarded_price_datum* pnt_nbbo,
     int      num_venue,
     uint64_t time,
@@ -63,7 +63,7 @@ guarded_price_datum* init_snapshot(
         size_t num_tickers = num_sec_codes / NUM_STOCK_EXCHANGE;
         for (size_t i=0; i<num_tickers; ++i) {
             guarded_price_datum* pnt_nbbo = sec_data + i * NUM_STOCK_EXCHANGE;
-            calc_new_market( pnt_nbbo, NUM_STOCK_EXCHANGE, 0, 1000000);
+            calc_new_market_with_random_price_change( pnt_nbbo, NUM_STOCK_EXCHANGE, 0, 1000000);
         }
     }
 

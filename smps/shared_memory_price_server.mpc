@@ -1,0 +1,25 @@
+project(shared_memory_price_server)  {
+
+  install=../bin
+
+  // this tells mpc, that Hello is an executable
+  exename= shared_memory_price_server
+
+  includes += . ../circular_queue_cpp11 ../ioguard
+
+  specific(make) {
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=c++11
+  }
+
+  Source_Files {
+    shared_memory_price_server.cpp
+    set_signal_handlers.cpp
+    set_cpu_affinity.cpp
+    shared_memory_price_server.cpp
+    set_schedular_policy.cpp
+    init_handshake_info.cpp
+    get_shared_memory_object.cpp
+    init_heartbeats.cpp
+    init_snapshot.cpp
+  }
+}

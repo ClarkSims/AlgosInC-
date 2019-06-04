@@ -23,7 +23,6 @@ void termination_handler (int signum);
 
 void set_signal_handlers(volatile int * flag);
 
-
 struct security_encoding {
     char ticker[8];
     char exchange[8];
@@ -91,5 +90,11 @@ guarded_price_datum* init_snapshot(
     bool first_time = 0);
 
 #define SECURITY_SNAPSHOT_SHMEM_ID 3333
+
+void calc_new_market_with_random_price_change(
+    guarded_price_datum* pnt_nbbo,
+    int      num_venue,
+    uint64_t time,
+    uint32_t midpoint);
 
 #endif

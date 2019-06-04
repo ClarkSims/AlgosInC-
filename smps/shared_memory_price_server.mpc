@@ -21,5 +21,6 @@ project(shared_memory_price_server)  {
     get_shared_memory_object.cpp
     init_heartbeats.cpp
     init_snapshot.cpp
+    calc_new_market_with_random_price_change.cpp
   }
 }

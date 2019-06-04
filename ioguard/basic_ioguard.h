@@ -108,6 +108,19 @@ namespace util_ipc {
             } while (front_guard != Back_guard);
         }
 
+        bool try_copy_to_rhs_reverse_order( U *rhs, size_t num_try) const volatile {
+            uint64_t Back_guard;
+            for (size_t try_iter=0; try_iter<num_try; ++num_try) {
+                Back_guard = back_guard;
+                std::copy( (const volatile uint64_t *)&data, end(), (uint64_t*)rhs);
+                architecture_aquire_fence();
+                if (front_guard == Back_guard) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         void copy_to_rhs_reverse_order( U &rhs) const volatile {
             copy_to_rhs_reverse_order( &rhs);
         }

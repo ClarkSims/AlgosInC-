@@ -1,7 +1,6 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
-#include <vector>
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
@@ -21,10 +20,12 @@ int main() {
     uint64_t begin_heartbeats = *heartbeats;
     architecture_aquire_fence();
     print_snapshot(gpd, sec_codes, num_sec_codes);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     architecture_aquire_fence();
     uint64_t end_heartbeats = *heartbeats;
     if (begin_heartbeats == end_heartbeats) {
         std::cerr << "begin_heartbeats == end_heartbeats" << std::endl;
+        std::cerr << "price server might be dead!" << std::endl;
         return 1;
     } else {
         std::cout << "number of heartbeats during print = "

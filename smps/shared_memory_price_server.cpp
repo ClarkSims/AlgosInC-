@@ -5,6 +5,7 @@
 #include "architecture.h"
 #include "shared_memory_price_server.h"
 
+#define EXIT_EARLY true
 #define SAVE_CPU_SLEEP_TIME 100
 
 int main() {
@@ -18,6 +19,7 @@ int main() {
     init_handshake_info(sec_codes, num_sec_codes);
     guarded_price_datum *gpd = init_snapshot(sec_codes, num_sec_codes, true);
     heartbeats = init_heartbeats();
+    *heartbeats = 0;
 
     while (true) {
         ++*heartbeats;
@@ -37,6 +39,10 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(SAVE_CPU_SLEEP_TIME));
 #else
         architecture_pause();
+#endif
+
+#if EXIT_EARLY
+        if  (*heartbeats > 10) break;
 #endif
     }
     std::cerr << "shutting down" << std::endl;

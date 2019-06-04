@@ -32,22 +32,17 @@ namespace util_ipc {
 
   public:
         struct guard_t {
-          guard_t front;
-          guard_t back;
+          guard_type front = 0;
+          guard_type back = 0;
         };
         std::atomic<guard_t> guard;
         U data;
     
-        atomic_ioguard( const U& data) :
-            front_guard(0),
-            back_guard(0),
-            data(data)
+        atomic_ioguard( const U& data) 
         {
         }
 
-        atomic_ioguard() :
-            front_guard(0),
-            back_guard(0)
+        atomic_ioguard()
         {
         }
     
@@ -60,12 +55,12 @@ namespace util_ipc {
         }
     
         void init( const U* rhs) {
-            ++front_guard;
+            ++(guard_type&)guard.front;
             architecture_aquire_fence(); // mark *this as unstable
             const volatile uint64_t *End = (const volatile uint64_t *)rhs+num_64bit_reads;
             std::copy( (const volatile uint64_t *)rhs, End, (uint64_t*)&data);
             architecture_release_fence(); // mark *this as stable
-            back_guard = front_guard;
+            (guard_type&)guard.back = (guard_type&)guard.front;
         }
    
         void init( const U &rhs) {

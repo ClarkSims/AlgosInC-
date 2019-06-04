@@ -16,7 +16,7 @@ int main() {
     set_cpu_affinity(SHARED_MEMORY_PRICE_SERVER_CPU_AFFINITY);
     set_schedular_policy_fifo();
     set_signal_handlers(&stop_now);
-    init_handshake_info(sec_codes, num_sec_codes);
+    init_handshake_info(sec_codes, num_sec_codes, true);
     guarded_price_datum *gpd = init_snapshot(sec_codes, num_sec_codes, true);
     heartbeats = init_heartbeats();
     *heartbeats = 0;

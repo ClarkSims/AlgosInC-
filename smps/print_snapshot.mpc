@@ -1,0 +1,27 @@
+project(print_snapshot)  {
+
+  install=../bin
+
+  // this tells mpc, that Hello is an executable
+  exename= print_snapshot
+
+  includes += . ../circular_queue_cpp11 ../ioguard
+
+  specific(make) {
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=c++11
+  }
+
+  Source_Files {
+    print_snapshot.cpp
+    set_signal_handlers.cpp
+    set_cpu_affinity.cpp
+    print_snapshot.cpp
+    set_schedular_policy.cpp
+    init_handshake_info.cpp
+    get_shared_memory_object.cpp
+    init_heartbeats.cpp
+    init_snapshot.cpp
+    calc_new_market_with_random_price_change.cpp
+    price_datum.cpp
+  }
+}

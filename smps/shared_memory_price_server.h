@@ -33,7 +33,7 @@ extern const char *tickers[];
 
 // populates shared memory file with list of exchanges, tickers, security ids, and tick denominators
 // ie security encodings
-void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes);
+void init_handshake_info(security_encoding*& sec_codes, size_t& num_sec_codes, bool first=false);
 
 void *get_shared_memory_object( const char *fname, int id, size_t size, bool huge_page=false);
 
@@ -58,4 +58,8 @@ void calc_new_market_with_random_price_change(
     uint64_t time,
     uint32_t midpoint);
 
+void print_snapshot(
+    guarded_price_datum* snapshot,
+    security_encoding* sec_codes,
+    size_t num_sec_codes);
 #endif

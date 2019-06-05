@@ -7,8 +7,6 @@
 
 #include "architecture.h"
 
-#include <atomic>
-
 namespace util_ipc {
 
   template
@@ -22,6 +20,8 @@ namespace util_ipc {
           "fast copy requires size to be even multiple of 64 bits");
         static_assert(std::is_trivially_copyable<U>::value,
           "must be trivially copyable");
+//        static_assert(std::atomic<U>::is_lock_free,
+//            "U must be atomic / lock_free");
         inline volatile uint64_t* end() volatile { 
             return (uint64_t*)&data + num_64bit_reads;
         }
@@ -38,7 +38,7 @@ namespace util_ipc {
         std::atomic<guard_t> guard;
         U data;
     
-        atomic_ioguard( const U& data) 
+        atomic_ioguard( const U& data) : data(data)
         {
         }
 

@@ -1,11 +1,11 @@
 project(test1_circular_queue_in_shared_memory)  {
 
-  install=../../bin
+  install=../bin
 
   // this tells mpc, that Hello is an executable
   exename= test1_circular_queue_in_shared_memory
 
-  includes += ..  ../../CustomRand
+  includes += .  ../CustomRand
 
   specific(make) {
     genflags += -Wall -std=c++11 -ggdb -O4

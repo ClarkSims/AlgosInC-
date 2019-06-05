@@ -13,7 +13,7 @@ using namespace util_ipc;
 using namespace std;
 
 // bigger than 1 small page, smaller than 1 huge page
-#define SIZE   1024
+#define SIZE   1024*4
 #define N      SIZE
 
 void tolower( string &s) {
@@ -30,6 +30,7 @@ int main( int argc, char *argv[])
     void *data;
     typedef circular_queue<unsigned,SIZE> cqueue;
     size_t i, cqueue_size = sizeof(cqueue);
+    cout << "cqueue_size = " << cqueue_size << endl;
     cqueue *cq = nullptr;
 
     if (argc != 2) {
@@ -116,7 +117,7 @@ int main( int argc, char *argv[])
         cerr << "test passed in Child process!" << endl;
 
         long long tm = std::chrono::duration_cast<std::chrono::microseconds>(dt).count();
-        tm /= (N * sizeof(int64_t));
+        tm /= (N * sizeof(unsigned));
 
         cout << "micro seconds / byte = " << tm << endl;
 

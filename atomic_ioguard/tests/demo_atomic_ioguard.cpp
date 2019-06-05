@@ -10,7 +10,7 @@ using namespace std;
 int main() {
   uint64_t i = 0x12345678, j;
   atomic_ioguard<uint64_t> x(i), y, z;
-#if 0
+#if 1
   assert( i == x.get_data());
 
   y.init_reverse_order( &x);

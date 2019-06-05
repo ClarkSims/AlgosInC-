@@ -18,6 +18,7 @@
 #if defined(ARCH_X86)
 #define architecture_aquire_fence()  memory_fence::lfence()
 #define architecture_release_fence() memory_fence::sfence()
+
 // define pause
 #if defined(_MSC_VER)
 #define architecture_pause()  _ReadWriteBarrier(), __asm { pause }, _ReadWriteBarrier()
@@ -29,5 +30,14 @@
 #define architecture_release_fence() std::atomic_thread_fence(std::memory_order_release)
 #define architecture_pause()
 #endif // ARCH_X86
+
+// define likely / unlikely
+#if defined(__GNUC__)
+#define architecture_likely(x)   __builtin_expect(!!(x), 1)
+#define architecture_unlikely(x) __builtin_expect(!!(x), 0)
+#else
+#define architecture_likely(x)   x
+#define architecture_unlikely(x) x
+#endif
 
 #endif

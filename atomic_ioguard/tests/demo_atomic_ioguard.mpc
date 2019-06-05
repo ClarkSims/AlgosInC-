@@ -7,8 +7,10 @@ project(demo_atomic_ioguard)  {
 
   includes += .. ../../circular_queue_cpp11
 
+  libs += atomic
+
   specific(make) {
-    genflags += -Wall -std=c++11 -ggdb -O0 -std=gnu++0x 
+    genflags += -Wall -std=c++11 -ggdb -O0 -std=gnu++0x
   }
 
   Specific (nmake,vc8,vc7) {

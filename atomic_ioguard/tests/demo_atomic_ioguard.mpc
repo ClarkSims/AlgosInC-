@@ -1,9 +1,9 @@
-project(demo_basic_ioguard)  {
+project(demo_atomic_ioguard)  {
 
   install=../../bin
 
   // this tells mpc, that Hello is an executable
-  exename= demo_basic_ioguard
+  exename= demo_atomic_ioguard
 
   includes += .. ../../circular_queue_cpp11
 
@@ -16,6 +16,6 @@ project(demo_basic_ioguard)  {
   }
 
   Source_Files {
-    demo_basic_ioguard.cpp
+    demo_atomic_ioguard.cpp
   }
 }

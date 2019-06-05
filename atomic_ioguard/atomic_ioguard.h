@@ -59,6 +59,7 @@ namespace util_ipc {
             ++local_guard.front;
             guard.store(local_guard,std::memory_order_relaxed);
             architecture_release_fence();
+memory_fence::sfence();
 
             // note this_thread is the only writer, so data is always clean
             const volatile uint64_t *End = (const volatile uint64_t *)rhs+num_64bit_reads;
@@ -66,6 +67,7 @@ namespace util_ipc {
 
             // mark *this as clean for readers
             architecture_release_fence();
+memory_fence::sfence();
             local_guard.back = local_guard.front;
             guard.store(local_guard,std::memory_order_relaxed);
         }
@@ -95,9 +97,10 @@ namespace util_ipc {
 
                 if (architecture_likely(local_guard.front == local_guard.back)) {
                     architecture_aquire_fence();
+memory_fence::lfence();
                     std::copy( (const volatile uint64_t*)&rhs->data, rhs->end(), (uint64_t*)&data);
 
-                    local_guard = guard.load(std::memory_order_relaxed);
+                    local_guard = guard.load(std::memory_order_aquire);
                     // todo research adding pause somewhere
                     if (architecture_likely(local_guard.front == back_guard)) {
                         break;
@@ -119,6 +122,7 @@ namespace util_ipc {
 
                 if (architecture_likely(local_guard.front == local_guard.back)) {
                     architecture_aquire_fence();
+memory_fence::lfence();
                     std::copy( (const volatile uint64_t*)&data, end(), (uint64_t*)rhs);
 
                     local_guard = guard.load(std::memory_order_relaxed);

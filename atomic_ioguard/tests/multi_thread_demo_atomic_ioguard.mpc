@@ -1,11 +1,13 @@
-project(multi_thread_demo_basic_ioguard)  {
+project(multi_thread_demo_atomic_ioguard)  {
 
   install=../../bin
 
   // this tells mpc, that Hello is an executable
-  exename= multi_thread_demo_basic_ioguard
+  exename= multi_thread_demo_atomic_ioguard
 
   includes += .. ../../circular_queue_cpp11
+
+  libs += atomic
 
   specific(make) {
     genflags += -Wall -std=c++11 -ggdb -O0 -std=gnu++0x 
@@ -17,6 +19,6 @@ project(multi_thread_demo_basic_ioguard)  {
   }
 
   Source_Files {
-    multi_thread_demo_basic_ioguard.cpp
+    multi_thread_demo_atomic_ioguard.cpp
   }
 }

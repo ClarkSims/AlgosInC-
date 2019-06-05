@@ -57,7 +57,7 @@ namespace util_ipc {
     
         void init( const U* rhs) {
             ++front_guard;
-            architecture_aquire_fence(); // mark *this as unstable
+            architecture_release_fence(); // mark *this as unstable
             const volatile uint64_t *End = (const volatile uint64_t *)rhs+num_64bit_reads;
             std::copy( (const volatile uint64_t *)rhs, End, (uint64_t*)&data);
             architecture_release_fence(); // mark *this as stable

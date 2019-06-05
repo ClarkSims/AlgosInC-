@@ -55,18 +55,22 @@ namespace util_ipc {
         }
     
         void init( const U* rhs) {
-            ++(guard_type&)guard.front;
+            guard_t local_guard = guard.load(std::memory_order_relaxed);
             architecture_aquire_fence(); // mark *this as unstable
+            ++local_guard.front;
+            guard.store(local_guard,std::memory_order_relaxed);
+            architecture_release_fence();
             const volatile uint64_t *End = (const volatile uint64_t *)rhs+num_64bit_reads;
             std::copy( (const volatile uint64_t *)rhs, End, (uint64_t*)&data);
             architecture_release_fence(); // mark *this as stable
-            (guard_type&)guard.back = (guard_type&)guard.front;
+            local_guard.back = local_guard.front;
+            guard.store(local_guard,std::memory_order_relaxed);
         }
    
         void init( const U &rhs) {
             init( &rhs);
         }
-
+#if 0
         void copy_to_rhs( atomic_ioguard* rhs) const {
             ++rhs->front_guard;
             architecture_release_fence(); // mark rhs as unstable
@@ -127,6 +131,7 @@ namespace util_ipc {
         void copy_to_rhs_reverse_order( U &rhs) const volatile {
             copy_to_rhs_reverse_order( &rhs);
         }
+#endif
     };
 }
 

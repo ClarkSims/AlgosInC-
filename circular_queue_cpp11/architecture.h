@@ -16,7 +16,7 @@
 #include "memory_fence.h"
 
 #if defined(ARCH_X86)
-#define architecture_aquire_fence()  std::atomic_signal_fence(std::memory_order_acq_rel)
+#define architecture_aquire_fence()  memory_fence::lfence()
 #define architecture_release_fence() memory_fence::sfence()
 // define pause
 #if defined(_MSC_VER)

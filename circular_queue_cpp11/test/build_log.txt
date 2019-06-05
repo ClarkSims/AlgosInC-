@@ -1,0 +1,2 @@
+g++  -fPIC -Wall -std=c++11 -ggdb -O0 -D_REENTRANT -I".." -I"../../CustomRand" -c  -o "test1_circular_queue_in_shared_memory.o" test1_circular_queue_in_shared_memory.cpp
+g++  -fPIC -Wall -std=c++11 -ggdb -O0 -D_REENTRANT -I".." -I"../../CustomRand" -L"." test1_circular_queue_in_shared_memory.o -l"rt" -ldl -lpthread  -o "../../bin/test1_circular_queue_in_shared_memory"

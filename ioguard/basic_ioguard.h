@@ -91,12 +91,18 @@ namespace util_ipc {
         }
 
         void init_reverse_order( const volatile basic_ioguard* rhs) {
-            do {
+            while (true) {
                 back_guard = rhs->back_guard;
-                std::copy( (const volatile uint64_t*)&rhs->data, rhs->end(), (uint64_t*)&data);
                 architecture_aquire_fence();
-                front_guard = rhs->front_guard;
-            } while (front_guard != back_guard);
+                if (architecture_likely(rhs->front_guard == back_guard)) {
+                    std::copy( (const volatile uint64_t*)&rhs->data, rhs->end(), (uint64_t*)&data);
+                    architecture_aquire_fence();
+                    front_guard = rhs->front_guard;
+                    if (architecture_likely(rhs->front_guard == back_guard)) {
+                        break;
+                    }
+                }
+            }
         }
 
         void init_reverse_order( const volatile basic_ioguard& rhs) {
@@ -105,11 +111,17 @@ namespace util_ipc {
 
         void copy_to_rhs_reverse_order( U *rhs) const volatile {
             uint64_t Back_guard;
-            do {
-                Back_guard = back_guard;
-                std::copy( (const volatile uint64_t *)&data, end(), (uint64_t*)rhs);
-                architecture_aquire_fence();
-            } while (front_guard != Back_guard);
+            while (true) {
+                if (architecture_likely(front_guard == back_guard)) {
+                    Back_guard = back_guard;
+                    architecture_aquire_fence();
+                    std::copy( (const volatile uint64_t *)&data, end(), (uint64_t*)rhs);               
+                    architecture_aquire_fence();
+                    if (architecture_likely(front_guard == Back_guard)) {
+                        break;
+                    }
+                }
+            }
         }
 
         bool try_copy_to_rhs_reverse_order( U *rhs, size_t num_try) const volatile {

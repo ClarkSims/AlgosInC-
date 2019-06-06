@@ -13,7 +13,7 @@ using namespace util_ipc;
 using namespace std;
 
 // bigger than 1 small page, smaller than 1 huge page
-#define SIZE   1024*4
+#define SIZE   1024*1024
 #define N      SIZE
 
 void tolower( string &s) {
@@ -30,6 +30,7 @@ int main( int argc, char *argv[])
     void *data;
     typedef circular_queue<unsigned,SIZE> cqueue;
     size_t i, cqueue_size = sizeof(cqueue);
+    cout << "N = " << N << endl;
     cout << "cqueue_size = " << cqueue_size << endl;
     cqueue *cq = nullptr;
 
